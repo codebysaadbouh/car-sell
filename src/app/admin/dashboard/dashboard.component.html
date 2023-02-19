@@ -1,0 +1,145 @@
+<!--
+<div class="container">
+  <div class="mt-4">
+    <div class="row">
+      <div class="col-md-8 mx-auto">
+        <table class="table table-hover table-dark">
+          <thead>
+          <tr>
+            <th scope="col">Brand</th>
+            <th scope="col">Model</th>
+            <th scope="col">Year</th>
+            <th scope="col">Color</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr class="dashboard-item"  *ngFor="let car of cars">
+            <td>{{car.name}}</td>
+            <td>{{car.model}}</td>
+            <td>{{car.year}}</td>
+            <td>{{car.color}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+-->
+  <!--
+  <div class="container py-5">
+    <div class="row">
+      <div class="col-12 col-md-10 col-lg-8 col-xl-6 mx-auto">
+        <div class="bg-white shadow-sm rounded p-4">
+          <h1 class="display-6 text-dark text-center">Créer une annonce</h1>
+          <hr class="bg-dark mb-5">
+          <form #announceForm="ngForm" (ngSubmit)="onSubmitannounceForm(announceForm)">
+            <div class="form-group mb-3">
+              <label for="offerBrandInput">Marque</label>
+              <input type="text" class="form-control" id="offerBrandInput" placeholder="Marque" name="marque" ngModel>
+            </div>
+            <div class="form-group mb-3">
+              <label for="offerModelInput">Modèle</label>
+              <input type="text" class="form-control" id="offerModelInput" placeholder="Modèle" name="model" ngModel>
+            </div>
+            <div class="form-group mb-3">
+              <label for="offerDescriptionInput">Description</label>
+              <textarea  class="w-100 form-control" id="offerDescriptionInput" rows="5" placeholder="Description" name="description" ngModel></textarea>
+            </div>
+            <div class="form-group mb-3">
+              <label for="offerPriceInput">Prix</label>
+              <input type="number" class="w-100 form-control" id="offerPriceInput" rows="5" placeholder="Prix" name="price" ngModel>
+            </div>
+            <div class="d-flex">
+              <button type="submit" class="btn btn-success mx-auto btn">Enregister</button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+   -->
+
+  <div class="container py-3">
+    <div class="row">
+      <div class="col-12 col-md-10 col-lg-8 col-xl-6 mx-auto">
+        <div class="bg-white shadow-sm rounded p-4">
+          <h1 class="display-6 text-dark text-center">Créer une annonce</h1>
+          <hr class="bg-dark mb-5">
+          <form [formGroup]="announceForm" (ngSubmit)="onSubmitAnnounceForm()">
+            <input type="text" formControlName="id" hidden>
+            <div class="form-group mb-3">
+              <label for="offerBrandInput">Marque</label>
+              <input type="text" class="form-control" id="offerBrandInput" placeholder="Marque" formControlName="brand" appUppercaseInput>
+            </div>
+            <div class="px-3" *ngIf="currentAnnouncePhotoUrl">
+              <img [src]="currentAnnouncePhotoUrl" class="img-thumbnail rounded w-100" alt="photo">
+            </div>
+            <div class="form-group mb-3">
+                <label for="offerPhotoInput" class="form-label">Choisir une image</label>
+              <input type="file" name="" id="offerPhotoInput" class="form-control" formControlName="photo" (change)="onChangeAnnouncePhoto($event)">
+            </div>
+            <div class="form-group mb-3">
+              <label for="offerModelInput">Modèle</label>
+              <input type="text" class="form-control" id="offerModelInput" placeholder="Modèle" formControlName="model">
+            </div>
+            <div class="form-group mb-3">
+              <label for="offerDescriptionInput">Description</label>
+              <textarea  class="w-100 form-control" id="offerDescriptionInput" rows="5" placeholder="Description" formControlName="description"></textarea>
+            </div>
+            <div class="form-group mb-3">
+              <label for="offerPriceInput">Prix</label>
+              <input type="number" class="w-100 form-control" id="offerPriceInput" placeholder="Prix" formControlName="price">
+            </div>
+            <div class="d-flex">
+              <button type="submit" class="btn btn-success mx-auto btn" [disabled]="announceForm.invalid">Enregister</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="mt-4">
+      <div class="row">
+        <div class="col-md-8 mx-auto">
+         <div *ngIf="announces.length > 0; else other_content">
+           <table class="table table-hover table-dark">
+             <thead>
+             <tr>
+               <th scope="col">ID</th>
+               <th scope="col">Brand</th>
+               <th scope="col">Photo</th>
+               <th scope="col">Model</th>
+               <th scope="col">description</th>
+               <th scope="col">price</th>
+               <th scope="col">Actions</th>
+             </tr>
+             </thead>
+             <tbody>
+             <tr class="dashboard-item"  *ngFor="let announce of announces; let i = index">
+               <td>{{i}}</td>
+               <td>{{announce.brand | firstChartUppercase}}</td>
+               <td>
+                  <img *ngIf="announce.photo" [src]="announce.photo | safeUrl" class="img-thumbnail rounded" alt="photo" width="90">
+               </td>
+               <td>{{announce.model}}</td>
+               <td>{{announce.description}}</td>
+               <td>{{announce.price | currency:'EUR':'symbol' :'0.2-2':'fr'}}</td>
+               <td>
+                 <button type="button" (click)="onEditAnnounce(announce)" class="btn btn-primary btn-sm mx-1">Modify</button>
+                 <button type="button" (click)="onDeleteAnnounce(announce.id)" class="btn btn-danger btn-sm mx-1">Delete</button>
+               </td>
+             </tr>
+             </tbody>
+           </table>
+         </div>
+          <ng-template #other_content>
+            <div class="alert alert-danger" role="alert">
+              No announces
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+</div>

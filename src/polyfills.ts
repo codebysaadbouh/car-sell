@@ -43,6 +43,13 @@
  */
 
 /***************************************************************************************************
+ * Import Bootstrap.min.js, Jquery.min.js and fontawesome
+ * TODO : Import popper.min.js later on
+ */
+import '@fortawesome/fontawesome-free/js/all.min.js';
+import 'bootstrap/dist/js/bootstrap.min.js';
+
+/***************************************************************************************************
  * Zone JS is required by default for Angular itself.
  */
 import 'zone.js';  // Included with Angular CLI.
